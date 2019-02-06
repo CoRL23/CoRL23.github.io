@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ycalc</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    
+    
+    <body bgcolor="black">
+        <div align="center">
+        <FORM name="Ycalc">
+            <h6><font color="white">Puntos de Vida</font></h6>
+        <table align="center" border="4" bgcolor="teal">
+		  <tr>
+				<th>p/e:damage</th>
+				<th>Player</th>
+				<th>Enemy</th>
+		  </tr>
+		  <tr>
+				<td align="center">
+                                    <table>
+                                        <tr>
+                                            <td width="7%"><font face="Courier" size="5">
+                                    <input type="text" maxlength="40" size="1" name="kDisplay">
+                                    </font></td><td width="93%"><font face="Courier" size="5">
+                                    <input type="text" maxlength="40" size="5" name="gDisplay">
+                                    </font></td>
+                                        </tr>
+                                    </table>
+                                                                     
+                                </td>
+				<td align="center">
+                                    <font face="Courier" size="5">
+                                    <input type="text" maxlength="40" size="6" name="pDisplay">
+                                    </font>
+                                </td>
+				<td align="center">
+                                    <font face="Courier" size="5">
+                                    <input type="text" maxlength="40" size="6" name="eDisplay">
+                                    </font>
+                                </td>
+		  </tr>
+	</table>
+            
+        <table border="4" bgcolor="teal" >
+            <tr>
+                <td> <!--panel izquierdo-->
+                    <table>
+                        <tr>
+                          <td><input type="button" name="pushuno" value="   1    " OnClick="plotDam('1')"></td>
+                          <td><input type="button" name="pushdos" value="   2    " OnClick="plotDam('2')"></td>
+                          <td><input type="button" name="pushtre" value="   3    " OnClick="plotDam('3')"></td>
+                        </tr>
+                        <tr>
+                          <td><input type="button" name="pushcua" value="   4    " OnClick="plotDam('4')"></td>
+                          <td><input type="button" name="pushcin" value="   5    " OnClick="plotDam('5')"></td>
+                          <td><input type="button" name="pushsei" value="   6    " OnClick="plotDam('6')"></td>
+                        </tr>
+                        <tr>
+                          <td><input type="button" name="pushsie" value="   7    " OnClick="plotDam('7')"></td>
+                          <td><input type="button" name="pushoch" value="   8    " OnClick="plotDam('8')"></td>
+                          <td><input type="button" name="pushnue" value="   9    " OnClick="plotDam('9')"></td>
+                        </tr>
+                        <tr>
+                          <td><input type="button" name="pushmas" value="  +/-  " OnClick="sumA()"></td>
+                          <td><input type="button" name="pushcer" value="   0    " OnClick="plotDam('0')"></td>
+                          <td><input type="button" name="pushpla" value=" p/e   " OnClick="damC()"></td>
+                        </tr>
+                        </table>
+                </td><!--panel izquierdo fin-->
+                <td><!--panel derecho-->
+                    <table>
+                        <tr>
+                          <td><br/> </td>
+                        </tr>
+                        <tr>
+                          <td><input type="button" name="oper" value="    OK    " OnClick="damA('-')"></td>
+                        </tr>
+                        <tr>
+                          <td><input type="button" name="borr" value="     C     " OnClick="corr()"></td>
+                        </tr>
+                        <tr>
+                          <td><input type="button" name="rset" value="    AC    " OnClick="rese()"></td>
+                        </tr>
+                    </table>
+                </td><!--panel derecho fin-->
+            </tr>
+        </table>
+            <h6><font color="white">CoRL - 2020</font></h6>
+        </form>
+        </div>
+        
+        <script>
+            dVal = "0";
+            ovrf = 5;     // maximo numero de digitos
+                        
+            opef = 0;
+            dObj =""; //objetivo de daño
+            reg1 = 8000; //player lp
+            reg2 = 8000; //enemy lp
+            
+            document.Ycalc.kDisplay.value = dObj;
+            document.Ycalc.gDisplay.value = dVal;
+            document.Ycalc.pDisplay.value = reg1;
+            document.Ycalc.eDisplay.value = reg2;
+            
+            function plotDam(valo)          //agrega digito al display (como as 'dVal')
+             { if (dVal.indexOf("!") == -1)  //verifica que no hay errores
+                { if (eval(dVal) == 0)   
+                      { dVal = valo;
+                       } else
+                       { dVal = dVal + valo;
+                       };
+                } else
+                { dVal = "!AC=Reset";  //ayuda si hay error.
+                };
+               
+               if (dVal.length > ovrf)
+                 { dVal = "!Mucho"; //no se permite mas digitos que 6 = ovrf 
+                 };
+               document.Ycalc.gDisplay.value = dVal;
+             }
+            
+            function corr()     //corregir entrada , borrar
+            {
+                dVal="0";
+                document.Ycalc.gDisplay.value = dVal;
+            }
+            
+            function rese()     //resetear todo
+            {
+                reg1=8000;
+                reg2=8000;
+                dObj="";
+                pVal="0";
+                document.Ycalc.kDisplay.value = dObj;
+                document.Ycalc.gDisplay.value = pVal;
+                document.Ycalc.pDisplay.value = reg1;
+                document.Ycalc.eDisplay.value = reg2;
+            }  
+            
+            function damC()
+            {
+               switch(dObj) 
+                {
+                    case "e":
+                        dObj="";
+                        break;
+                    case "":
+                        dObj="p";
+                        break;
+                    case "p":
+                        dObj="e";
+                        break;
+                }   
+                document.Ycalc.kDisplay.value = dObj; 
+            }
+            
+            
+            function damA(subs) //opera la substracion de daño
+            {
+                 if (subs.indexOf("-") > -1)
+                {
+                opef = 1; //operation flag opef set
+                }
+                if (opef != 0 && dObj=="p") //(if opef set and dObj = p)
+                {
+                    opef=0;
+                    calc(1);// llamar calculacion() contra p
+                    document.Ycalc.pDisplay.value = reg1;
+                }
+                if (opef != 0 && dObj=="e") //(if opef set and dObj = p)
+                {
+                    opef=0;
+                   calc(2);// llamar calculacion() contra e
+                    document.Ycalc.eDisplay.value = reg2;
+                }
+                dVal="0";
+                document.Ycalc.gDisplay.value = dVal;
+                dObj="";
+                document.Ycalc.kDisplay.value = dObj;
+                
+               
+                
+            }
+            
+            function calc(dam)  //calculo de daño
+            {
+                if (dam==1){reg1=reg1-eval(dVal);};
+                if (dam==2){reg2=reg2-eval(dVal);};
+                
+            }
+            
+            function sumA()     //para sumar
+            {
+                dVal=eval(dVal)*-1;//change to positive and printout
+                document.Ycalc.gDisplay.value = dVal;
+            }
+            
+            
+        </script>
+        
+
+    </body>
+</html>
